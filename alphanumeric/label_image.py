@@ -20,6 +20,7 @@ from __future__ import print_function
 import argparse
 import sys
 import time
+from PIL import Image
 
 import numpy as np
 import tensorflow as tf
@@ -67,12 +68,14 @@ def load_labels(label_file):
     label.append(l.rstrip())
   return label
 
-def main(file_name)
-  # file_name = "tf_files/train/C/c-agency-fb-bold-pentagon-black-blue-zero-degrees.jpg"
+def main(file_name):
   model_file = "tf_files/retrained_graph.pb"
   label_file = "tf_files/retrained_labels.txt"
-  input_height = 299
-  input_width = 299
+
+  image = Image.open(file_name)
+
+  input_height = image.height
+  input_width = image.width
   input_mean = 128
   input_std = 128
   input_layer = "Mul"

@@ -109,13 +109,11 @@ def find_color(hsv_val):
     return color
 
 # Main code starts here
-def main(index, directory):
+def main(filename):
     #reads image and gets image pixel shape
     
     #filename = directory + '\DSC_' + str(index) + '.jpg'
 #   filename = r'C:\Users\UHDT\Pictures\Test Targets' + '/DSC_0' + str(index) + '.jpg'
-    filename = r'D\'
-    print(filename)
     img = cv2.imread(filename)
     height, width, _ = np.shape(img)
 
@@ -210,6 +208,11 @@ def main(index, directory):
     #cv2.imshow(f'{num_clusters} Most Common Colors', np.hstack(bars))
     #cv2.waitKey(0)
     print("\n")
+
+    return {
+        "shape_color": shape_color,
+        "alphanumeric_color": alpha_color
+    }
 
 #start and ending indices
 start = 3358
