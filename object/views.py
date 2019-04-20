@@ -3,7 +3,8 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from pipeline.models import Metadata
-from .label_image import main
+from getValues import main
+# from .label_image import main
 from simple_rest_client.api import API
 
 @csrf_exempt
@@ -13,9 +14,7 @@ def index(request):
     body_unicode = request.body.decode('utf-8')
     body = json.loads(body_unicode)
 
-    object = label_image()
-
-    Metadata.objects.get(image_name=body['image_name']).update(object=object)
+    Metadata.objects.get(image_name=body['image_name']).update(object=body)
 
     api = API(
         api_root_url='http://localhost:8000',

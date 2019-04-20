@@ -36,21 +36,31 @@ class Handler(FileSystemEventHandler):
             # Take any action here when a file is first created.
             print("Received created event - %s." % event.src_path)
             filename = event.src_path.split(os.sep)
+            sep = os.sep
+            filepath = "\\".join(filename)
+            # if (filename[len(filename) - 1] != os.sep):
+            #     filename.append(os.sep)
             print(filename[len(filename) - 1])
+            print(filepath.split(os.sep))
 
-            api = API(
-                api_root_url='http://localhost:8000',
-                json_encode_body=True,
-                append_slash=True,
-            )
+            # run cpp script through command line args for object detection
+            # with a rest client hit the object detection endpoint and update the database. also send that to color and alpha detection
 
-            api.add_resource(resource_name='pipeline')
-            api.pipeline.create(
-                body = {
-                    'image_name': filename,
-                    'image_path': event.src_path,
-                }
-            )
+            # api = API(
+            #     api_root_url='http://localhost:8000',
+            #     json_encode_body=True,
+            #     append_slash=True,
+            # )
+
+            # api.add_resource(resource_name='pipeline')
+            # api.pipeline.create(
+            #     body = {
+            #         'image_name': filename[len(filename) - 1],
+            #         'image_path': filepath,
+            #     }
+            # )
+
+            os.system("run.exe")
 
 if __name__ == '__main__':
     w = Watcher()

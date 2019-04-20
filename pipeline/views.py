@@ -20,19 +20,19 @@ def index(request):
       # shape_color = body['shape_color'],
     )
 
-    api = API(
-        api_root_url='http://localhost:8000',
-        json_encode_body=True,
-        append_slash=True,
-    )
+    # api = API(
+    #     api_root_url='http://localhost:8000',
+    #     json_encode_body=True,
+    #     append_slash=True,
+    # )
 
-    api.add_resource(resource_name='object')
-    api.object.create(
-      body = {
-          'image_name': body['image_name'],
-          'image_path': body['image_path']
-      }
-    )
+    # api.add_resource(resource_name='object')
+    # api.object.create(
+    #   body = {
+    #       'image_name': body['image_name'],
+    #       'image_path': body['image_path']
+    #   }
+    # )
     
     return HttpResponse("Written")
 

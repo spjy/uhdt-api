@@ -215,12 +215,12 @@ def main(filename):
     }
 
 #start and ending indices
-start = 3358
-end = 3367
+# start = 3358
+# end = 3367
 
-#change directory accordingly
-directory = r"C:\Users\UHDT\Pictures\Test Targets"
-main(3358, directory)
+# #change directory accordingly
+# directory = r"C:\Users\UHDT\Pictures\Test Targets"
+# main(3358, directory)
 #while(start <= end):
 #    main(start, directory)
 #    start += 1
