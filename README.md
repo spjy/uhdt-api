@@ -11,7 +11,8 @@ The UHDT API, built on the Django Framework, primarily acts as the middleware be
 
 1. Clone the repository:
 ```bash
-$ git clone https://github.com/spjy/uhdtapi.git
+git clone https://github.com/spjy/uhdt-api.git
+cd uhdt-api
 ```
 
 2. Install Python 3.6 +
@@ -38,20 +39,50 @@ $ python ./src/manage.py runserver
 
 These folders contain the apps of the project.
 
-`/src/alphanumeric` - This is where the alphanumeric recognition script is held.
+`/src/alphanumeric` - This is where the alphanumeric recognition script is held, along with the endpoint declarations.
 
-`/src/color` - This is where the color recognition script is held.
+`/src/color` - This is where the color recognition script is held, along with the endpoint declarations.
 
-`/src/object` - This is where the object detection script is held.
+`/src/object` - This is where the object detection script is held, along with the endpoint declarations.
 
-`/src/pipeline` - This is where the data culminates after all of the recognition scripts are run.
-
+`/src/pipeline` - This is where the data culminates after all of the image data is stored.
 
 ### Common files in app folders
+
+These are the essential file names you should know about. If you want to read more about them, refer to the [Django Docs](https://docs.djangoproject.com/en/2.2/).
 
 `urls.py` - This contains the definitions for the request URLs.
 
 `views.py` - This contains the functionality for each type of REST method.
+
+## HTTP Endpoints
+
+HTTP Endpoints are how you initialize each script. You can "hit" an HTTP endpoint similar to how you enter a URL into a web browser. There are three types of endpoints and those are GET, POST, PUT, PATCH and DELETE. GET is the act of receiving a record from the server. POST is the act of sending a record to the server and the server saves the said record. PUT is the replacing of a whole record. PATCH is the editing of a certain key in a record. Finally, DELETE is the deletion of a record.
+
+In order to test out the endpoints, use a REST client such as Insomnia. Simply enter the URL of the server and append the endpoint you want to initialize. For example, if I wanted to access the GET endpoint called "pipeline" on my local computer, I would specify I wanted to use the GET protocol and enter the URL as http://localhost:3000/pipeline.
+
+This is one method of how to deal with data transfer across various nodes.
+
+All endpoints take the payload of:
+
+```
+{
+  "image_name": "name"
+  "image_path": "path/to/image"
+}
+```
+
+`/pipeline` POST - This initializes an entry into a database for a specific image and initializes the object detection script.
+
+`/alphanumeric` POST - This endpoint initializes the alphanumeric recognition script and saves the result to a database.
+
+`/color` POST - This endpoint initializes the color recognition script and saves the result to a database.
+
+`/object` POST - This endpoint initializes the object recognition script and saves the result to a database.
+
+## Watcher
+
+To start the recognition process, we need to know when new files are created. Polling and watching for a directory is expensive and inefficient, especially if we are running multiple detection scripts. By using Watchdog, a file watcher, we can send an event only when new files are created, thus reducing computer resources. Watchdog works by interfacing with the kernal of the operating system and listens for changes in a certain directory with the file watcher API. In this way, we are able to allocate resources to other, more important tasks.
 
 ## How it works
 
