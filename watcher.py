@@ -35,33 +35,20 @@ class Handler(FileSystemEventHandler):
         elif event.event_type == 'created':
             # Take any action here when a file is first created.
             print("Received created event - %s." % event.src_path)
-            filename = event.src_path.split(os.sep)
+            filepath = event.src_path.split(os.sep)
             sep = os.sep
-            filepath = "\\".join(filename)
-            # if (filename[len(filename) - 1] != os.sep):
-            #     filename.append(os.sep)
-            print(filename[len(filename) - 1])
-            print(filepath.split(os.sep))
+            print(filepath[len(filepath) - 1])
 
-            # run cpp script through command line args for object detection
-            # with a rest client hit the object detection endpoint and update the database. also send that to color and alpha detection
+            filename = filepath[len(filepath) - 1]
 
-            # api = API(
-            #     api_root_url='http://localhost:8000',
-            #     json_encode_body=True,
-            #     append_slash=True,
-            # )
+            filepath.pop(len(filepath) - 1)
 
-            # api.add_resource(resource_name='pipeline')
-            # api.pipeline.create(
-            #     body = {
-            #         'image_name': filename[len(filename) - 1],
-            #         'image_path': filepath,
-            #     }
-            # )
+            filepath = os.sep.join(filepath)
+            print(filepath)
 
-            os.system("run.exe")
+            os.system(f".\object\ShapeRecognition.exe {filepath} {filename}")
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     w = Watcher()
     w.run()
+    

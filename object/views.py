@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-import json
 from pipeline.models import Metadata
-from getValues import main
+import json
+from .getValues import main
 # from .label_image import main
 from simple_rest_client.api import API
 

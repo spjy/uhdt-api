@@ -209,10 +209,12 @@ def main(filename):
     #cv2.waitKey(0)
     print("\n")
 
-    return {
+    colors = {
         "shape_color": shape_color,
         "alphanumeric_color": alpha_color
     }
+
+    return colors
 
 #start and ending indices
 # start = 3358

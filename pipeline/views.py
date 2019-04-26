@@ -13,26 +13,34 @@ def index(request):
 
     Metadata.objects.create(
       image_name = body['image_name'],
-      image_path = body['image_path']
+      image_path = body['image_path'],
+      object = body['object']
       # alphanumeric = body['alphanumeric'],
-      # object = body['object'],
       # alphanumeric_color = body['alphanumeric_color'],
       # shape_color = body['shape_color'],
     )
 
-    # api = API(
-    #     api_root_url='http://localhost:8000',
-    #     json_encode_body=True,
-    #     append_slash=True,
-    # )
+    api = API(
+        api_root_url='http://localhost:8000',
+        json_encode_body=True,
+        append_slash=True,
+    )
 
-    # api.add_resource(resource_name='object')
-    # api.object.create(
-    #   body = {
-    #       'image_name': body['image_name'],
-    #       'image_path': body['image_path']
-    #   }
-    # )
+    api.add_resource(resource_name='alphanumeric')
+    api.object.create(
+      body = {
+          'image_name': body['image_name'],
+          'image_path': body['image_path']
+      }
+    )
+
+    api.add_resource(resource_name='color')
+    api.object.create(
+      body = {
+          'image_name': body['image_name'],
+          'image_path': body['image_path']
+      }
+    )
     
     return HttpResponse("Written")
 
