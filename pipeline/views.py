@@ -3,6 +3,8 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import Metadata
 import json
+import os
+from PIL import Image
 from simple_rest_client.api import API
 
 @csrf_exempt
@@ -20,6 +22,12 @@ def index(request):
       # shape_color = body['shape_color'],
     )
 
+    # resize to 299x299 image, send off to color and alpha!!
+
+    print('RESIZING IMAGE: ' + body['image_name'])
+
+    os.system(f'magick mogrify -resize 299!x299! C:\watcher_directory\output\{body["image_name"]}')
+
     api = API(
         api_root_url='http://localhost:8000',
         json_encode_body=True,
@@ -27,7 +35,7 @@ def index(request):
     )
 
     api.add_resource(resource_name='alphanumeric')
-    api.object.create(
+    api.alphanumeric.create(
       body = {
           'image_name': body['image_name'],
           'image_path': body['image_path']
@@ -35,7 +43,7 @@ def index(request):
     )
 
     api.add_resource(resource_name='color')
-    api.object.create(
+    api.color.create(
       body = {
           'image_name': body['image_name'],
           'image_path': body['image_path']
