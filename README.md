@@ -34,7 +34,6 @@ $ python ./src/manage.py makemigrations # Initialize tables
 $ python ./src/manage.py migrate # Initialize schema
 ```
 
-
 ## Running
 
 Simply run this command in the root project folder to run the API:
@@ -46,7 +45,7 @@ $ python ./src/manage.py runserver
 Open a new command prompt and run:
 
 ```bash
-$ python ./src/watcher.py
+$ python ./watcher.py
 ```
 
 ## Directory Structure
@@ -108,6 +107,14 @@ To start the recognition process, we need to know when new files are created. Po
 
 I began research on how to possibly link into the GPS by hooking into the MAVLink and grabbing the telemetry data directly through a UDP serial port on the Pixhawk. My plan was to query the MAVLink when the camera took a picture on the interval, then somehow associate that GPS location to the image (possibly by hitting the HTTP endpoint on Django and saving it on the database) and getting an accurate position.
 
+### Sending to the interop network directly
+
+Since we cannot get the GPS location autonomously, we cannot send to the interop network directly. We must first save the data to a JSON file and append the GPS location manually. I planned on hitting the API network directly to submit the JSON via POST request to get more points.
+
 ## How it works
 
-It starts on the Raspberry Pi; there will be an observer watching for new files being written to a certain file directory using the Python framework Watchdog. From there, a POST request will be made to the object detection script to detect at what location the shape is. Then, if object detection is confident enough, it will save the bounding box coordinates and send a cropped image via a POST request off to color and alphanumeric recognition. It will then save the outcomes of the color and alphanumeric recognition scripts into the database. Finally, it will send off the results to the interoperatbility network.
+It starts on the Raspberry Pi; there will be an observer watching for new files being written to a certain file directory using the Python framework Watchdog. This script will send a file via SSH to the image processing laptop and save the image into `C:\watcher_directory`.
+
+Another watcher script will be listening to `C:\watcher_directory` to detect when the image has been written to the image processing laptop directory. Once it has detected it, a command line command will be sent to the shape recognition script, a C++ script. The C++ script is contained within `/src/object/ShapeRecognition.exe` and takes in the filepath and filename in as the first and second arguments respectively. It runs the algorithm (and crops the image) and then saves the output to `C:\watcher_directory\output` where it is formatted `{object}{index}{image_name}.jpg`. The shape recognition script will subsequently send another command line command back to a Python script which takes in command line arguments consisting of the filepath, filename and the object detected. That script will then save the data into the database.
+
+Once the data is successfully saved, an API call will get instantiated to run the alphanumeric and color recognition scripts. Those recognition scripts will save the outputs of their algorithms to the database once finished processing. Finally, it will save all of the data to a JSON file.
