@@ -11,8 +11,8 @@ The UHDT API, built on the Django Framework, primarily acts as the middleware be
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/spjy/uhdt-api.git
-cd uhdt-api
+$ git clone https://github.com/spjy/uhdt-api.git
+$ cd uhdt-api
 ```
 
 2. Install Python 3.6 +
@@ -23,12 +23,30 @@ https://www.python.org/downloads/
 $ pip install Django
 ```
 
+### Common Tasks
+
+#### Clearing and migrating the database
+
+Some common processes you may run into during normal operations include having to clear and migrate the database. First remove all contents within `db.sqlite3`.
+
+```bash
+$ python ./src/manage.py makemigrations # Initialize tables
+$ python ./src/manage.py migrate # Initialize schema
+```
+
+
 ## Running
 
-Simply run this command in the root project folder:
+Simply run this command in the root project folder to run the API:
 
 ```bash
 $ python ./src/manage.py runserver
+```
+
+Open a new command prompt and run:
+
+```bash
+$ python ./src/watcher.py
 ```
 
 ## Directory Structure
@@ -83,6 +101,12 @@ All endpoints take the payload of:
 ## Watcher
 
 To start the recognition process, we need to know when new files are created. Polling and watching for a directory is expensive and inefficient, especially if we are running multiple detection scripts. By using Watchdog, a file watcher, we can send an event only when new files are created, thus reducing computer resources. Watchdog works by interfacing with the kernal of the operating system and listens for changes in a certain directory with the file watcher API. In this way, we are able to allocate resources to other, more important tasks.
+
+## Future Work
+
+### GPS
+
+I began research on how to possibly link into the GPS by hooking into the MAVLink and grabbing the telemetry data directly through a UDP serial port on the Pixhawk. My plan was to query the MAVLink when the camera took a picture on the interval, then somehow associate that GPS location to the image (possibly by hitting the HTTP endpoint on Django and saving it on the database) and getting an accurate position.
 
 ## How it works
 
